@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>jquery-ajax sample</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$( function() {
+
+$("#button1").click(
+function(){
+	$("#span6").text("getting data");
+
+	$.ajax({	
+		url:"http://httpbin.org/post",
+		type:"POST",
+		data:$("#form1").serialize(),
+		dataType:"json", 
+		timespan:1000
+		}).done(function(data1,textStatus,jqXHR) {
+				$("#span1").text(jqXHR.status); //ex 200
+				$("#span2").text(textStatus); //ex success
+
+				$("#span4").text(data1["form"]["cs1"]);
+
+				var data2 = JSON.stringify(data1);
+				console.log(data2); //check console
+
+				var data3 = JSON.parse(data2);
+				$("#span5").text(data3["headers"]["Host"]); //check console
+
+		}).fail(function(jqXHR, textStatus, errorThrown ) {
+				$("#span1").text(jqXHR.status); //ex 404
+				$("#span2").text(textStatus); //ex error
+				$("#span3").text(errorThrown); //ex NOT FOUND
+
+		}).always(function(){
+				$("#span6").text("complete"); //always
+				
+	});
+});
+});
+</script>
+</head>
+<body >
+<p>jqXHR.status : <span id="span1"></span></p>
+<p>textStatus : <span id="span2"></span></p>
+<p>errorThrown : <span id="span3"></span></p>
+<p>Data1 : <span id="span4"></span></p>
+<p>Data2 : <span id="span5"></span></p>
+<p>Data3 : <span id="span6"></span></p>
+
+<p>--- Start Ajax ---</p>
+
+<form id="form1">
+<input type="button" id="button1" value="Button1">
+<p>TextBox1</p>
+<input type="text" name="cs1" value="custom1" maxlength="10">
+<p>TextBox2</p>
+<input type="text" name="cs2" value="custom2" maxlength="10">
+</form>
+</body>
+</html>
